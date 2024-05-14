@@ -1,5 +1,8 @@
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { useState } from "react";
 import { styled } from "styled-components";
+import { auth } from "../firebase";
+import { useNavigate } from "react-router-dom";
 
 const Wrapper = styled.div`
   height: 100%;
@@ -42,6 +45,7 @@ const Error = styled.span`
 `;
 
 export default function CreateAccount() {
+  const navigate = useNavigate();
   const [isLoading, setLoading] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -62,24 +66,37 @@ export default function CreateAccount() {
     }
   };
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
+      setLoading(true);
       // 계정 생성
+      if (isLoading || name === "" || email === "" || password === "") return;
+      // 계성 생성 성공 시 자격증명
+      const credentials = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      console.log(credentials.user);
       // 사용자 이름 set
+      await updateProfile(credentials.user, {
+        displayName: name,
+      });
       // 홈페이지로 redirect
+      navigate("/");
     } catch (e) {
       // 에러 핸들링
     } finally {
       setLoading(false);
     }
 
-    console.log(name, email, password);
+    // console.log(name, email, password);
   };
 
   return (
     <Wrapper>
-      <Title>Log into J</Title>
+      <Title>Join J</Title>
       <Form onSubmit={onSubmit}>
         <Input
           onChange={onChange}
