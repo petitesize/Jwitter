@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { styled } from "styled-components";
 import { auth } from "../firebase";
 import { Link, useNavigate } from "react-router-dom";
 import { FirebaseError } from "firebase/app";
@@ -12,6 +11,7 @@ import {
   Title,
   Wrapper,
 } from "../components/auth-components";
+import GithubButton from "../components/github-btn";
 
 export default function CreateAccount() {
   const navigate = useNavigate();
@@ -84,6 +84,7 @@ export default function CreateAccount() {
         아직 회원이 아니신가요?{" "}
         <Link to="/create-account">회원가입 &rarr;</Link>
       </Switcher>
+      <GithubButton />
     </Wrapper>
   );
 }
