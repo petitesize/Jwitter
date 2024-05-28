@@ -33,9 +33,15 @@ const MenuItem = styled.div`
     fill: white;
   }
   &.log-out {
-    border-color: tomato;
+    border-color: white;
     svg {
-      fill: tomato;
+      fill: white;
+    }
+  }
+  &:hover {
+    border-color: #f1718a;
+    svg {
+      fill: #f1718a;
     }
   }
 `;
@@ -97,6 +103,7 @@ export default function Layout() {
           </svg>
         </MenuItem>
       </Menu>
+      <Outlet />
     </Wrapper>
   );
 }

@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 
 const Button = styled.span`
   margin-top: 50px;
-  background-color: white;
+  background-color: #fef3f6;
   font-weight: 600;
   width: 100%;
   color: black;
@@ -21,6 +21,11 @@ const Button = styled.span`
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  &:hover {
+    background-color: #f1718a;
+    color: white;
+    opacity: 1;
+  }
 `;
 
 const Logo = styled.img`

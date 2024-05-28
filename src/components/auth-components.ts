@@ -28,10 +28,14 @@ export const Input = styled.input`
   border: none;
   width: 100%;
   font-size: 16px;
+
   &[type="submit"] {
     cursor: pointer;
+    background-color: #fef3f6;
     &:hover {
-      opacity: 0.8;
+      background-color: #f1718a;
+      color: white;
+      opacity: 1;
     }
   }
 `;
@@ -44,6 +48,6 @@ export const Error = styled.span`
 export const Switcher = styled.span`
   margin-top: 20px;
   a {
-    color: #1d9bf0;
+    color: #f1718a;
   }
 `;
