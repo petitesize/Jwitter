@@ -1,6 +1,8 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
+import { getStorage } from "firebase/storage";
+import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_REACT_APP_FIREBASE_API_KEY,
@@ -19,3 +21,9 @@ const analytics = getAnalytics(app);
 
 // firebaseConfig(도메인, api key 등 키 값들) 옵션을 통해 생성된 app 에 대한 인증 서비스를 사용
 export const auth = getAuth(app);
+
+// 스토리지
+export const storage = getStorage(app);
+
+// db
+export const db = getFirestore(app);

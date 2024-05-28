@@ -1,5 +1,7 @@
+import { addDoc, collection } from "firebase/firestore";
 import { useState } from "react";
 import styled from "styled-components";
+import { auth, db } from "../firebase";
 
 const Form = styled.form`
   display: flex;
@@ -78,8 +80,30 @@ export default function PostTweetForm() {
     }
   };
 
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const user = auth.currentUser;
+    // 유저 로그인 상태가 아니거나, 로딩 중이거나, 글 내용이 없거나, 글씨 제한 수를 넘은 경우 함수 종료
+    if (!user || isLoading || jweet === "" || jweet.length > 300) return;
+
+    try {
+      setLoading(true);
+      await addDoc(collection(db, "jweets"), {
+        jweet,
+        createAt: Date.now(),
+        username: user.displayName || "익명",
+        // 게시물 삭제 권한 체크를 위해, 게시물 작성한 유저의 id를 저장해줘야한다
+        userId: user.uid,
+      });
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <Form>
+    <Form onSubmit={onSubmit}>
       <TextArea
         rows={5}
         maxLength={300}
