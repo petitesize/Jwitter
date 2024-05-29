@@ -44,7 +44,7 @@ const AttachFileInput = styled.input`
   display: none;
 `;
 
-// 재사용 가능한 컴포넌트로 공통화 하는 것도 좋아보임!
+// *** 재사용 가능한 컴포넌트로 공통화 하는 것도 좋아보임!
 const SubmitBtn = styled.input`
   background-color: #f1718a;
   color: white;
@@ -76,6 +76,7 @@ export default function PostTweetForm() {
 
     const { files } = e.target;
     // 우리는 하나의 사진만 업로드하게 해줄 것이기 때문에, 1개인지 확인 후 그 파일을 File 상태에 저장
+    // *** 1MB의 저장 용량 제한을 두면 좋을 것 같음!
     if (files && files?.length === 1) {
       setFile(files[0]);
     }
@@ -92,7 +93,7 @@ export default function PostTweetForm() {
       //   addDoc은 생성된 document의 참조를 promise로 반환해준다
       const doc = await addDoc(collection(db, "jweets"), {
         jweet,
-        createAt: Date.now(),
+        createdAt: Date.now(),
         username: user.displayName || "익명",
         // 게시물 삭제 권한 체크를 위해, 게시물 작성한 유저의 id를 저장해줘야한다
         userId: user.uid,

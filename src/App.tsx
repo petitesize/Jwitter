@@ -43,6 +43,11 @@ const router = createBrowserRouter([
 
 const GlobalStyles = createGlobalStyle`
   ${reset};
+  /* 스크롤 바 삭제 */
+  ::-webkit-scrollbar {
+    display:none;
+  }
+
   * {
     box-sizing: border-box;
   }
