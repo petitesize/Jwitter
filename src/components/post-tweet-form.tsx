@@ -99,10 +99,7 @@ export default function PostTweetForm() {
         userId: user.uid,
       });
       if (file) {
-        const locationRef = ref(
-          storage,
-          `jweets/${user.uid}-${user.displayName}/${doc.id}`
-        );
+        const locationRef = ref(storage, `jweets/${user.uid}/${doc.id}`);
 
         // db에 사진 url을 저장해주기
         // 파일을 어디에 저장할 것인지, 어떤 파일을 저장할 것인지 지정
