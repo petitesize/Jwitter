@@ -1,8 +1,18 @@
 import styled from "styled-components";
-import { auth, storage } from "../firebase";
-import { useState } from "react";
+import { auth, db, storage } from "../firebase";
+import { useEffect, useState } from "react";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { updateProfile } from "firebase/auth";
+import {
+  collection,
+  getDocs,
+  limit,
+  orderBy,
+  query,
+  where,
+} from "firebase/firestore";
+import { IJweet } from "../components/timeline";
+import Jweet from "../components/jweet";
 
 const Wrapper = styled.div`
   display: flex;
@@ -35,9 +45,17 @@ const Name = styled.span`
   font-size: 22px;
 `;
 
+const Jweets = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
+
 export default function Profile() {
   const user = auth.currentUser;
   const [avatar, setAvatar] = useState(user?.photoURL);
+  const [jweets, setJweets] = useState<IJweet[]>([]);
   const onAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target;
     if (files && files.length === 1) {
@@ -56,6 +74,29 @@ export default function Profile() {
       });
     }
   };
+  const fetchJweets = async () => {
+    // 현재 로그인한 유저 ID 와 같은 게시글만 가져옴
+    const jweetQuery = query(
+      collection(db, "jweets"),
+      //   where 과 같은 필터 사용 시, firestore 에게 어떤 필터가 발생할 것인지 알려야 한다
+      //   콘솔창의 오류 링크 클릭 시, 인덱스 설정 창으로 이동
+      where("userId", "==", user?.uid),
+      orderBy("createdAt", "desc"),
+      limit(25)
+    );
+
+    const snapshot = await getDocs(jweetQuery);
+    const jweets = snapshot.docs.map((doc) => {
+      const { jweet, createdAt, userId, username, photo } = doc.data();
+      return { jweet, createdAt, userId, username, photo, id: doc.id };
+    });
+    setJweets(jweets);
+  };
+
+  useEffect(() => {
+    fetchJweets();
+  }),
+    [];
 
   return (
     <Wrapper>
@@ -85,6 +126,11 @@ export default function Profile() {
         accept="image/*"
       />
       <Name>{user?.displayName ?? "익명"}</Name>
+      <Jweets>
+        {jweets.map((jweet) => (
+          <Jweet key={jweet.id} {...jweet} />
+        ))}
+      </Jweets>
     </Wrapper>
   );
 }
